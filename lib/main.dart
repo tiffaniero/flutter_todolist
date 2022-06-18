@@ -123,13 +123,14 @@ class _ToDoPageState extends State<ToDoPage> {
                   onPressed: () {
                     _toDoList[index] = _textEditingController.text;
                     setState(() {});
-                    _textEditingController.clear();
                     Navigator.of(context).pop();
+                    _textEditingController.clear();
                   },
                   child: const Text("Ok")),
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    _textEditingController.clear();
                   },
                   child: const Text("Annuler"))
             ],
