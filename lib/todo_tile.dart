@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class TaskTile extends StatefulWidget {
+class ToDoTile extends StatefulWidget {
   final String text;
   final void Function()? delete;
   final void Function()? update;
 
-  const TaskTile({Key? key, required this.text, this.delete, this.update})
+  const ToDoTile({Key? key, required this.text, this.delete, this.update})
       : super(key: key);
 
   @override
-  State<TaskTile> createState() => _TaskTileState();
+  State<ToDoTile> createState() => _ToDoTileState();
 }
 
-class _TaskTileState extends State<TaskTile> {
+class _ToDoTileState extends State<ToDoTile> {
   bool? value = false;
 
   @override

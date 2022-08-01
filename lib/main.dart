@@ -1,7 +1,8 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:todolist/task_tile.dart';
+import 'package:todolist/todo.dart';
+import 'package:todolist/todo_tile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,8 +44,13 @@ class ToDoPage extends StatefulWidget {
 }
 
 class _ToDoPageState extends State<ToDoPage> {
-  List<String> _toDoList = [];
-  TextEditingController _textEditingController = TextEditingController();
+  List<ToDo> _toDoList = [];
+  final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +62,13 @@ class _ToDoPageState extends State<ToDoPage> {
       body: ListView.builder(
           itemCount: _toDoList.length,
           itemBuilder: (context, int index) {
-            return TaskTile(
-              text: _toDoList[index],
+            return ToDoTile(
+              text: _toDoList[index].getName(),
               delete: () {
-                _deleteTask(index);
+                _deleteToDo(index);
               },
               update: () {
-                _updateTask(index);
+                _updateToDo(index);
               },
             );
           }),
@@ -81,7 +87,7 @@ class _ToDoPageState extends State<ToDoPage> {
                   actions: [
                     TextButton(
                         onPressed: () {
-                          _addTask(_textEditingController.text);
+                          _addToDo(_textEditingController.text);
                           Navigator.of(context).pop();
                         },
                         child: const Text("Ok")),
@@ -99,16 +105,16 @@ class _ToDoPageState extends State<ToDoPage> {
   }
 
   //CREATE
-  void _addTask(String task) {
+  void _addToDo(String toDoName) {
     setState(() {
-      _toDoList.add(task);
+      _toDoList.add(ToDo(toDoName));
       _textEditingController.clear();
     });
   }
 
   //UPDATE
-  void _updateTask(int index) {
-    _textEditingController.text = _toDoList[index];
+  void _updateToDo(int index) {
+    _textEditingController.text = _toDoList[index].getName();
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -121,7 +127,7 @@ class _ToDoPageState extends State<ToDoPage> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _toDoList[index] = _textEditingController.text;
+                    _toDoList[index].setName(_textEditingController.text);
                     setState(() {});
                     Navigator.of(context).pop();
                     _textEditingController.clear();
@@ -139,7 +145,7 @@ class _ToDoPageState extends State<ToDoPage> {
   }
 
   //DELETE
-  void _deleteTask(int index) {
+  void _deleteToDo(int index) {
     setState(() {
       _toDoList.removeAt(index);
     });
