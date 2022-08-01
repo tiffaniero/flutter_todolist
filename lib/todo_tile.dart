@@ -4,8 +4,14 @@ class ToDoTile extends StatefulWidget {
   final String text;
   final void Function()? delete;
   final void Function()? update;
+  final bool value;
 
-  const ToDoTile({Key? key, required this.text, this.delete, this.update})
+  const ToDoTile(
+      {Key? key,
+      required this.text,
+      this.delete,
+      this.update,
+      required this.value})
       : super(key: key);
 
   @override
@@ -13,7 +19,12 @@ class ToDoTile extends StatefulWidget {
 }
 
 class _ToDoTileState extends State<ToDoTile> {
-  bool? value = false;
+  bool? value;
+
+  @override
+  void initState() {
+    value = widget.value;
+  }
 
   @override
   Widget build(BuildContext context) {

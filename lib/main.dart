@@ -70,6 +70,7 @@ class _ToDoPageState extends State<ToDoPage> {
               update: () {
                 _updateToDo(index);
               },
+              value: _toDoList[index].getStatus(),
             );
           }),
       floatingActionButton: FloatingActionButton(
