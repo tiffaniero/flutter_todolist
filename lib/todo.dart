@@ -19,4 +19,18 @@ class ToDo {
   void setStatus() {
     _status = _status ? true : false;
   }
+
+  ToDo.fromJSON(Map<String, dynamic> json)
+      : _name = json['name'],
+        _status = json['status'];
+
+  Map<String, dynamic> toJson() => {
+        'name': _name,
+        'status': _status,
+      };
+
+  @override
+  String toString() {
+    return "${runtimeType.toString()} = {Name : ${getName()}, Statut : ${getName()}}";
+  }
 }

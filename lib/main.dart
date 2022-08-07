@@ -1,8 +1,12 @@
 import 'dart:core';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:todolist/local_data_service.dart';
 import 'package:todolist/todo.dart';
 import 'package:todolist/todo_tile.dart';
+
+const _toDoListName = 'ToDoList';
 
 void main() {
   runApp(const MyApp());
@@ -30,6 +34,7 @@ class MyApp extends StatelessWidget {
         unselectedWidgetColor: Colors.amber,
       ),
       home: const ToDoPage(title: 'To Do List'),
+      debugShowCheckedModeBanner: false, //TODO Delete before commit
     );
   }
 }
@@ -46,14 +51,19 @@ class ToDoPage extends StatefulWidget {
 class _ToDoPageState extends State<ToDoPage> {
   List<ToDo> _toDoList = [];
   final TextEditingController _textEditingController = TextEditingController();
+  late final LocalDataService _localDataService;
 
   @override
   void initState() {
     super.initState();
+    _localDataService = LocalDataService();
+    _localDataService.save(
+        _toDoListName, [ToDo("Faire la vaisselle"), ToDo("Faire le ménage")]);
   }
 
   @override
   Widget build(BuildContext context) {
+    loadData();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -150,5 +160,11 @@ class _ToDoPageState extends State<ToDoPage> {
     setState(() {
       _toDoList.removeAt(index);
     });
+  }
+
+  loadData() async {
+    return _toDoList = await _localDataService
+        .getToDoList(_toDoListName)
+        .then((result) => result);
   }
 }
