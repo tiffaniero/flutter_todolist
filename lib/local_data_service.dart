@@ -11,9 +11,7 @@ class LocalDataService {
     List parsedJson = jsonDecode(jsonString!);
     print(
         "Json Parsé: $parsedJson\nLe type du Json Parsé est : ${parsedJson.runtimeType}");
-    Iterable<ToDo> toDoListData = parsedJson.map((e) => ToDo.fromJSON(e));
-    print(toDoListData.toList());
-    return toDoListData.toList();
+    return parsedJson.map((e) => ToDo.fromJSON(e)).toList();
   }
 
   void save(String key, value) async {

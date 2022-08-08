@@ -49,9 +49,17 @@ class ToDoPage extends StatefulWidget {
 }
 
 class _ToDoPageState extends State<ToDoPage> {
-  late List<ToDo> _toDoList;
-  final TextEditingController _textEditingController = TextEditingController();
   late final LocalDataService _localDataService;
+  final TextEditingController _textEditingController = TextEditingController();
+  List<ToDo> _toDoList = [];
+
+  Future loadData() async {
+    print("LoadData est déclenché !");
+    List<ToDo> list = await _localDataService.getToDoList(_toDoListName);
+    setState(() {
+      _toDoList = list;
+    });
+  }
 
   @override
   void initState() {
@@ -59,8 +67,7 @@ class _ToDoPageState extends State<ToDoPage> {
     _localDataService = LocalDataService();
     _localDataService.save(
         _toDoListName, [ToDo("Faire la vaisselle"), ToDo("Faire le ménage")]);
-    _toDoList = loadData() ?? [];
-    print("La datalist contient : ${loadData()}");
+    loadData();
   }
 
   @override
@@ -161,18 +168,5 @@ class _ToDoPageState extends State<ToDoPage> {
     setState(() {
       _toDoList.removeAt(index);
     });
-  }
-
-  List<ToDo>? loadData() {
-    try {
-      print("LoadData est déclenché !");
-      _localDataService.getToDoList(_toDoListName).then((value) {
-        print("Load data: $value");
-        return value;
-      });
-    } catch (err) {
-      print("No data : $err");
-      return null;
-    }
   }
 }
