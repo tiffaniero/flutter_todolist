@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/local_data_service.dart';
 import 'package:todolist/todo.dart';
@@ -105,6 +104,7 @@ class _ToDoPageState extends State<ToDoPage> {
                   content: TextField(
                     autofocus: true,
                     controller: _textEditingController,
+                    textCapitalization: TextCapitalization.sentences,
                   ),
                   actions: [
                     TextButton(
@@ -148,6 +148,7 @@ class _ToDoPageState extends State<ToDoPage> {
             content: TextField(
               autofocus: true,
               controller: _textEditingController,
+              textCapitalization: TextCapitalization.sentences,
             ),
             actions: [
               TextButton(
