@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         unselectedWidgetColor: Colors.amber,
       ),
       home: const ToDoPage(title: 'To Do List'),
-      debugShowCheckedModeBanner: false, //TODO Delete before commit
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -54,7 +54,6 @@ class _ToDoPageState extends State<ToDoPage> {
   List<ToDo> _toDoList = [];
 
   Future loadData() async {
-    print("LoadData est déclenché !");
     List<ToDo> list = await _localDataService.getToDoList(_toDoListName);
     setState(() {
       _toDoList = list;
@@ -65,8 +64,6 @@ class _ToDoPageState extends State<ToDoPage> {
   void initState() {
     super.initState();
     _localDataService = LocalDataService();
-    _localDataService.save(
-        _toDoListName, [ToDo("Faire la vaisselle"), ToDo("Faire le ménage")]);
     loadData();
   }
 
@@ -81,14 +78,20 @@ class _ToDoPageState extends State<ToDoPage> {
           itemCount: _toDoList.length,
           itemBuilder: (context, int index) {
             return ToDoTile(
-              text: _toDoList[index].getName(),
+              text: _toDoList[index].name,
+              value: _toDoList[index].status,
+              onChanged: (bool newValue) {
+                setState(() {
+                  _toDoList[index].status = newValue;
+                  _localDataService.save(_toDoListName, _toDoList);
+                });
+              },
               delete: () {
                 _deleteToDo(index);
               },
               update: () {
                 _updateToDo(index);
               },
-              value: _toDoList[index].getStatus(),
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -107,6 +110,9 @@ class _ToDoPageState extends State<ToDoPage> {
                     TextButton(
                         onPressed: () {
                           _addToDo(_textEditingController.text);
+                          setState(() {
+                            _localDataService.save(_toDoListName, _toDoList);
+                          });
                           Navigator.of(context).pop();
                         },
                         child: const Text("Ok")),
@@ -126,14 +132,14 @@ class _ToDoPageState extends State<ToDoPage> {
   //CREATE
   void _addToDo(String toDoName) {
     setState(() {
-      _toDoList.add(ToDo(toDoName));
+      _toDoList.add(ToDo(name: toDoName));
       _textEditingController.clear();
     });
   }
 
   //UPDATE
   void _updateToDo(int index) {
-    _textEditingController.text = _toDoList[index].getName();
+    _textEditingController.text = _toDoList[index].name;
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -146,8 +152,10 @@ class _ToDoPageState extends State<ToDoPage> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _toDoList[index].setName(_textEditingController.text);
-                    setState(() {});
+                    _toDoList[index].name = _textEditingController.text;
+                    setState(() {
+                      _localDataService.save(_toDoListName, _toDoList);
+                    });
                     Navigator.of(context).pop();
                     _textEditingController.clear();
                   },

@@ -7,10 +7,7 @@ class LocalDataService {
   Future<List<ToDo>> getToDoList(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jsonString = prefs.getString(key);
-    print("JsonString : $jsonString");
     List parsedJson = jsonDecode(jsonString!);
-    print(
-        "Json Parsé: $parsedJson\nLe type du Json Parsé est : ${parsedJson.runtimeType}");
     return parsedJson.map((e) => ToDo.fromJSON(e)).toList();
   }
 

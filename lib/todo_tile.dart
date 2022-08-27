@@ -2,34 +2,29 @@ import 'package:flutter/material.dart';
 
 class ToDoTile extends StatefulWidget {
   final String text;
-  final void Function()? delete;
-  final void Function()? update;
   final bool value;
+  final ValueChanged<bool> onChanged;
+  final void Function() delete;
+  final void Function() update;
 
-  const ToDoTile(
-      {Key? key,
-      required this.text,
-      this.delete,
-      this.update,
-      required this.value})
-      : super(key: key);
+  const ToDoTile({
+    Key? key,
+    required this.text,
+    required this.value,
+    required this.onChanged,
+    required this.delete,
+    required this.update,
+  }) : super(key: key);
 
   @override
   State<ToDoTile> createState() => _ToDoTileState();
 }
 
 class _ToDoTileState extends State<ToDoTile> {
-  bool? value;
-
-  @override
-  void initState() {
-    value = widget.value;
-  }
-
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-      title: value == true
+      title: widget.value == true
           ? Text(
               widget.text,
               style: const TextStyle(
@@ -55,11 +50,9 @@ class _ToDoTileState extends State<ToDoTile> {
           ),
         ],
       ),
-      value: value,
+      value: widget.value,
       onChanged: (bool? newValue) {
-        setState(() {
-          value = newValue;
-        });
+        widget.onChanged(newValue!);
       },
     );
   }
