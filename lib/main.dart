@@ -110,9 +110,6 @@ class _ToDoPageState extends State<ToDoPage> {
                     TextButton(
                         onPressed: () {
                           _addToDo(_textEditingController.text);
-                          setState(() {
-                            _localDataService.save(_toDoListName, _toDoList);
-                          });
                           Navigator.of(context).pop();
                         },
                         child: const Text("Ok")),
@@ -134,6 +131,7 @@ class _ToDoPageState extends State<ToDoPage> {
     setState(() {
       _toDoList.add(ToDo(name: toDoName));
       _textEditingController.clear();
+      _localDataService.save(_toDoListName, _toDoList);
     });
   }
 
@@ -176,6 +174,7 @@ class _ToDoPageState extends State<ToDoPage> {
   void _deleteToDo(int index) {
     setState(() {
       _toDoList.removeAt(index);
+      _localDataService.save(_toDoListName, _toDoList);
     });
   }
 }
